@@ -1,0 +1,1704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Designer Performance Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-50 to-purple-100 min-h-screen">
+    <div class="container mx-auto px-4 py-6">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800">Sales Designer Performance Dashboard</h1>
+                    <p class="text-gray-600" id="regionSummary">Canada Region 
+                <div class="flex items-center space-x-4">
+                    <select id="monthSelect" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                        <option value="2025-09" selected>September 2025</option>
+                        <option value="2025-10">October 2025</option>
+                        <option value="2025-11">November 2025</option>
+                        <option value="2025-12">December 2025</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- View Toggle -->
+            <div class="flex space-x-2 mb-4">
+                <button id="weeklyView" class="px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium">Weekly</button>
+                <button id="monthlyView" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300">Monthly</button>
+                <button id="quarterlyView" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300">Quarterly</button>
+                <button id="ytdView" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300">YTD</button>
+            </div>
+            
+            <!-- Ranking Criteria Toggle -->
+            <div class="flex space-x-2">
+                <span class="text-sm font-medium text-gray-700 py-2">Rank by:</span>
+                <button id="rankBySales" class="px-4 py-2 bg-green-600 text-white rounded-lg font-medium text-sm">Sales</button>
+                <button id="rankByClosing" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-300">Closing Rate</button>
+                <button id="rankByTicket" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-300">Avg Ticket</button>
+            </div>
+        </div>
+
+        <!-- Designer-Focused Overview Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Total Active Designers</p>
+                        <p class="text-2xl font-bold text-indigo-600" id="totalDesigners">45</p>
+                        <p class="text-sm text-green-600">+3 new this month</p>
+                    </div>
+                    <div class="p-3 bg-indigo-100 rounded-full">
+                        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Avg Designer Performance</p>
+                        <p class="text-2xl font-bold text-green-600" id="avgDesignerPerformance">82.4%</p>
+                        <p class="text-sm text-green-600">+4.2% vs last month</p>
+                    </div>
+                    <div class="p-3 bg-green-100 rounded-full">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 00-2-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600">Avg Sales Per Designer</p>
+                        <p class="text-2xl font-bold text-purple-600" id="avgSalesPerDesigner">$26,187</p>
+                        <p class="text-sm text-green-600">+5.8% vs last month</p>
+                    </div>
+                    <div class="p-3 bg-purple-100 rounded-full">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!-- Average Regional Performance Tracking -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Average Regional Performance Tracking</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-green-800 mb-2">Average Conversion Rate</h3>
+                    <p class="text-2xl font-bold text-green-600" id="avgConversionRate">58.7%</p>
+                    <div class="mt-2">
+                        <div class="text-sm text-green-600">Previous Month: 54.2%</div>
+                        <div class="flex items-center mt-1">
+                            <svg class="w-4 h-4 text-green-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                            </svg>
+                            <span class="text-xs text-green-600">+4.5% improvement</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-purple-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-purple-800 mb-2">Average Ticket Value</h3>
+                    <p class="text-2xl font-bold text-purple-600" id="avgTicketValue">$1,520</p>
+                    <div class="mt-2">
+                        <div class="text-sm text-purple-600">Previous Month: $1,485</div>
+                        <div class="flex items-center mt-1">
+                            <svg class="w-4 h-4 text-green-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                            </svg>
+                            <span class="text-xs text-green-600">+$35 increase</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-blue-800 mb-2">Average Appointments</h3>
+                    <p class="text-2xl font-bold text-blue-600" id="avgAppointments">18.3</p>
+                    <div class="mt-2">
+                        <div class="text-sm text-blue-600">Per designer/month</div>
+                        <div class="flex items-center mt-1">
+                            <svg class="w-4 h-4 text-green-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                            </svg>
+                            <span class="text-xs text-green-600">+2.1 vs last month</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Performance Trends Chart -->
+            <div class="mt-6 bg-gray-50 rounded-lg p-4">
+                <h4 class="font-semibold text-gray-800 mb-4">📈 Regional Performance Trends</h4>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div>
+                        <h5 class="text-sm font-medium text-gray-700 mb-2">Conversion Rate Trend</h5>
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs text-gray-600">
+                                <span>July</span>
+                                <span>52.1%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-400 h-2 rounded-full" style="width: 52%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-600">
+                                <span>August</span>
+                                <span>54.2%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 54%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-600">
+                                <span>September</span>
+                                <span>58.7%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-600 h-2 rounded-full" style="width: 59%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h5 class="text-sm font-medium text-gray-700 mb-2">Average Ticket Trend</h5>
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs text-gray-600">
+                                <span>July</span>
+                                <span>$1,445</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-purple-400 h-2 rounded-full" style="width: 72%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-600">
+                                <span>August</span>
+                                <span>$1,485</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-purple-500 h-2 rounded-full" style="width: 74%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-600">
+                                <span>September</span>
+                                <span>$1,520</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-purple-600 h-2 rounded-full" style="width: 76%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h5 class="text-sm font-medium text-gray-700 mb-2">Appointments Trend</h5>
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs text-gray-600">
+                                <span>July</span>
+                                <span>15.8 avg</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-400 h-2 rounded-full" style="width: 63%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-600">
+                                <span>August</span>
+                                <span>16.2 avg</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-500 h-2 rounded-full" style="width: 65%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-gray-600">
+                                <span>September</span>
+                                <span>18.3 avg</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-600 h-2 rounded-full" style="width: 73%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Designer Performance Table -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-6">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Regional Designer Performance Rankings</h2>
+                        <p class="text-gray-600">Current Period: <span id="currentPeriod">Week of September 2-8, 2025</span></p>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button id="manageFranchisesBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium">
+                            Manage Locations
+                        </button>
+                        <button id="filterDesignersBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium">
+                            Filter Designers
+                        </button>
+                        <button id="exportDataBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">
+                            Export Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rank</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Designer</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Franchise Location</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Monthly Sales</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avg Ticket</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conversion Rate</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Performance</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="designerTableBody" class="bg-white divide-y divide-gray-200">
+                        <!-- Designer rows will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Top Designers -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">⭐ Top Regional Designers</h3>
+            <div class="space-y-4" id="topDesigners">
+                <!-- Top designers will be populated here -->
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+    <!-- Franchise Management Modal -->
+    <div id="franchiseManagementModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 w-full max-w-4xl mx-4 max-h-screen overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-gray-800">Manage Franchise Locations</h3>
+                <button id="closeFranchiseManagement" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Add New Franchise Section -->
+            <div class="bg-green-50 rounded-lg p-6 mb-6">
+                <h4 class="text-lg font-semibold text-green-800 mb-4">Add New Franchise Location</h4>
+                <form id="addFranchiseForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Location Name</label>
+                        <input type="text" id="newFranchiseName" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="e.g., Kirkland Commons">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">City, State</label>
+                        <input type="text" id="newFranchiseLocation" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="e.g., Kirkland, WA">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Monthly Goal ($)</label>
+                        <input type="number" id="newFranchiseGoal" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="120000">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Number of Designers</label>
+                        <input type="number" id="newFranchiseDesigners" required min="1" max="10" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500" placeholder="3">
+                    </div>
+                    <div class="md:col-span-2">
+                        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium">
+                            Add Franchise Location
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Existing Franchises List -->
+            <div class="bg-gray-50 rounded-lg p-6">
+                <h4 class="text-lg font-semibold text-gray-800 mb-4">Current Franchise Locations</h4>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-white">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Location</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">City, State</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Monthly Sales</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Monthly Goal</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Designers</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Performance</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="franchiseManagementTableBody" class="bg-white divide-y divide-gray-200">
+                            <!-- Franchise rows will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteConfirmationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">Confirm Deletion</h3>
+            <p class="text-gray-600 mb-6">Are you sure you want to delete <span id="deleteLocationName" class="font-semibold"></span>? This action cannot be undone and will remove all associated designer data.</p>
+            <div class="flex justify-end space-x-3">
+                <button id="cancelDelete" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+                <button id="confirmDelete" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">Delete Location</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Designer Filter Modal -->
+    <div id="designerFilterModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">Filter Designers</h3>
+            <form id="designerFilterForm">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Performance Level</label>
+                    <select id="performanceFilter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                        <option value="all">All Designers</option>
+                        <option value="exceeding">Exceeding Goals (95%+)</option>
+                        <option value="meeting">Meeting Goals (80-95%)</option>
+                        <option value="developing">Developing (60-80%)</option>
+                        <option value="needs-support">Needs Support (<60%)</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Franchise Location</label>
+                    <select id="franchiseFilter" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                        <option value="all">All Locations</option>
+                        <option value="Bellevue Square">Bellevue Square</option>
+                        <option value="Downtown Seattle">Downtown Seattle</option>
+                        <option value="Tacoma Mall">Tacoma Mall</option>
+                        <option value="Spokane Valley">Spokane Valley</option>
+                        <option value="Portland Downtown">Portland Downtown</option>
+                        <option value="Eastside Marketplace">Eastside Marketplace</option>
+                        <option value="Olympia Center">Olympia Center</option>
+                        <option value="Vancouver Plaza">Vancouver Plaza</option>
+                        <option value="Beaverton Square">Beaverton Square</option>
+                        <option value="Salem Center">Salem Center</option>
+                        <option value="Eugene Gateway">Eugene Gateway</option>
+                        <option value="Bend Riverside">Bend Riverside</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Sales Range</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="number" id="minSales" placeholder="Min Sales" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                        <input type="number" id="maxSales" placeholder="Max Sales" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" id="cancelDesignerFilter" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+                    <button type="button" id="clearFilters" class="px-4 py-2 text-purple-600 hover:text-purple-800">Clear All</button>
+                    <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg">Apply Filters</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <!-- Drill Down Modal -->
+    <div id="drillDownModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-6 w-full max-w-4xl mx-4 max-h-screen overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-800">Franchise Detail View</h3>
+                <button id="closeDrillDown" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div id="drillDownContent">
+                <!-- Drill down content will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample franchise data with enhanced designer information
+        let franchises = [
+            {
+                id: 1,
+                name: "Bellevue Square",
+                location: "Bellevue, WA",
+                monthlySales: 142800,
+                monthlyGoal: 150000,
+                avgTicket: 1850,
+                conversionRate: 68.2,
+                designerCount: 4,
+                topPerformer: "Sarah Johnson",
+                trend: "up",
+                designers: [
+                    { name: "Sarah Johnson", sales: 45200, goal: 50000, avgTicket: 2100, conversionRate: 72, experience: "5 years", specialty: "Luxury Kitchens" },
+                    { name: "Mike Chen", sales: 38900, goal: 45000, avgTicket: 1950, conversionRate: 65, experience: "3 years", specialty: "Modern Design" },
+                    { name: "Emily Rodriguez", sales: 42750, goal: 48000, avgTicket: 1800, conversionRate: 69, experience: "4 years", specialty: "Traditional Style" },
+                    { name: "David Kim", sales: 15950, goal: 25000, avgTicket: 1200, conversionRate: 45, experience: "1 year", specialty: "New Designer" }
+                ]
+            },
+            {
+                id: 2,
+                name: "Downtown Seattle",
+                location: "Seattle, WA",
+                monthlySales: 127450,
+                monthlyGoal: 140000,
+                avgTicket: 1625,
+                conversionRate: 53.3,
+                designerCount: 3,
+                topPerformer: "Jennifer Walsh",
+                trend: "up",
+                designers: [
+                    { name: "Jennifer Walsh", sales: 52100, goal: 55000, avgTicket: 1850, conversionRate: 68, experience: "6 years", specialty: "Urban Living" },
+                    { name: "Robert Taylor", sales: 41200, goal: 45000, avgTicket: 1650, conversionRate: 58, experience: "4 years", specialty: "Contemporary" },
+                    { name: "Lisa Anderson", sales: 34150, goal: 40000, avgTicket: 1375, conversionRate: 48, experience: "2 years", specialty: "Transitional" }
+                ]
+            },
+            {
+                id: 3,
+                name: "Tacoma Mall",
+                location: "Tacoma, WA",
+                monthlySales: 118900,
+                monthlyGoal: 125000,
+                avgTicket: 1720,
+                conversionRate: 61.5,
+                designerCount: 4,
+                topPerformer: "Carlos Martinez",
+                trend: "stable",
+                designers: [
+                    { name: "Carlos Martinez", sales: 38200, goal: 40000 },
+                    { name: "Amanda Foster", sales: 32100, goal: 35000 },
+                    { name: "Kevin Wong", sales: 28900, goal: 30000 },
+                    { name: "Rachel Green", sales: 19700, goal: 20000 }
+                ]
+            },
+            {
+                id: 4,
+                name: "Spokane Valley",
+                location: "Spokane, WA",
+                monthlySales: 108750,
+                monthlyGoal: 115000,
+                avgTicket: 1580,
+                conversionRate: 59.8,
+                designerCount: 3,
+                topPerformer: "Thomas Brown",
+                trend: "up",
+                designers: [
+                    { name: "Thomas Brown", sales: 42300, goal: 45000 },
+                    { name: "Maria Garcia", sales: 35200, goal: 38000 },
+                    { name: "James Wilson", sales: 31250, goal: 32000 }
+                ]
+            },
+            {
+                id: 5,
+                name: "Portland Downtown",
+                location: "Portland, OR",
+                monthlySales: 95600,
+                monthlyGoal: 120000,
+                avgTicket: 1450,
+                conversionRate: 52.1,
+                designerCount: 4,
+                topPerformer: "Nicole Davis",
+                trend: "down",
+                designers: [
+                    { name: "Nicole Davis", sales: 28900, goal: 35000 },
+                    { name: "Steven Lee", sales: 24800, goal: 30000 },
+                    { name: "Ashley Miller", sales: 22100, goal: 28000 },
+                    { name: "Brandon Clark", sales: 19800, goal: 27000 }
+                ]
+            },
+            {
+                id: 6,
+                name: "Eastside Marketplace",
+                location: "Redmond, WA",
+                monthlySales: 89200,
+                monthlyGoal: 110000,
+                avgTicket: 1380,
+                conversionRate: 48.7,
+                designerCount: 3,
+                topPerformer: "Michelle Turner",
+                trend: "stable",
+                designers: [
+                    { name: "Michelle Turner", sales: 32100, goal: 40000 },
+                    { name: "Daniel Rodriguez", sales: 28700, goal: 35000 },
+                    { name: "Stephanie White", sales: 28400, goal: 35000 }
+                ]
+            },
+            {
+                id: 7,
+                name: "Olympia Center",
+                location: "Olympia, WA",
+                monthlySales: 87300,
+                monthlyGoal: 105000,
+                avgTicket: 1520,
+                conversionRate: 55.4,
+                designerCount: 3,
+                topPerformer: "Andrew Johnson",
+                trend: "up",
+                designers: [
+                    { name: "Andrew Johnson", sales: 31200, goal: 38000 },
+                    { name: "Christina Lopez", sales: 28600, goal: 34000 },
+                    { name: "Matthew Harris", sales: 27500, goal: 33000 }
+                ]
+            },
+            {
+                id: 8,
+                name: "Vancouver Plaza",
+                location: "Vancouver, WA",
+                monthlySales: 82100,
+                monthlyGoal: 100000,
+                avgTicket: 1420,
+                conversionRate: 51.2,
+                designerCount: 4,
+                topPerformer: "Jessica Martin",
+                trend: "stable",
+                designers: [
+                    { name: "Jessica Martin", sales: 24800, goal: 30000 },
+                    { name: "Ryan Thompson", sales: 21300, goal: 26000 },
+                    { name: "Laura Jackson", sales: 18900, goal: 24000 },
+                    { name: "Christopher Moore", sales: 17100, goal: 20000 }
+                ]
+            },
+            {
+                id: 9,
+                name: "Beaverton Square",
+                location: "Beaverton, OR",
+                monthlySales: 78900,
+                monthlyGoal: 95000,
+                avgTicket: 1350,
+                conversionRate: 49.8,
+                designerCount: 3,
+                topPerformer: "Samantha Lewis",
+                trend: "down",
+                designers: [
+                    { name: "Samantha Lewis", sales: 28100, goal: 35000 },
+                    { name: "Jonathan Walker", sales: 25400, goal: 30000 },
+                    { name: "Megan Hall", sales: 25400, goal: 30000 }
+                ]
+            },
+            {
+                id: 10,
+                name: "Salem Center",
+                location: "Salem, OR",
+                monthlySales: 74200,
+                monthlyGoal: 90000,
+                avgTicket: 1280,
+                conversionRate: 46.3,
+                designerCount: 3,
+                topPerformer: "Tyler Allen",
+                trend: "stable",
+                designers: [
+                    { name: "Tyler Allen", sales: 26800, goal: 32000 },
+                    { name: "Kimberly Young", sales: 24100, goal: 29000 },
+                    { name: "Eric King", sales: 23300, goal: 29000 }
+                ]
+            },
+            {
+                id: 11,
+                name: "Eugene Gateway",
+                location: "Eugene, OR",
+                monthlySales: 68500,
+                monthlyGoal: 85000,
+                avgTicket: 1220,
+                conversionRate: 44.1,
+                designerCount: 3,
+                topPerformer: "Brittany Scott",
+                trend: "down",
+                designers: [
+                    { name: "Brittany Scott", sales: 24200, goal: 30000 },
+                    { name: "Nathan Green", sales: 22800, goal: 28000 },
+                    { name: "Heather Adams", sales: 21500, goal: 27000 }
+                ]
+            },
+            {
+                id: 12,
+                name: "Bend Riverside",
+                location: "Bend, OR",
+                monthlySales: 64700,
+                monthlyGoal: 80000,
+                avgTicket: 1180,
+                conversionRate: 42.7,
+                designerCount: 2,
+                topPerformer: "Austin Baker",
+                trend: "stable",
+                designers: [
+                    { name: "Austin Baker", sales: 34200, goal: 42000 },
+                    { name: "Victoria Nelson", sales: 30500, goal: 38000 }
+                ]
+            }
+        ];
+
+        let currentView = 'weekly';
+        let currentMonth = '2025-09';
+        let currentRankingCriteria = 'sales';
+        let franchiseIdCounter = 13; // Next available ID
+        let franchiseToDelete = null;
+
+        // Initialize dashboard
+        function initDashboard() {
+            renderDesignerTable();
+            renderTopPerformers();
+            setupEventListeners();
+            updateDesignerMetrics();
+        }
+
+        // Update designer-focused metrics
+        function updateDesignerMetrics() {
+            const allDesigners = franchises.flatMap(f => f.designers);
+            const totalDesigners = allDesigners.length;
+            const totalSales = allDesigners.reduce((sum, d) => sum + d.sales, 0);
+            const avgSalesPerDesigner = totalSales / totalDesigners;
+            const avgPerformance = allDesigners.reduce((sum, d) => sum + (d.sales / d.goal), 0) / totalDesigners * 100;
+
+            // Update region summary
+            document.getElementById('regionSummary').textContent = `Pacific Northwest Region - ${franchises.length} Franchise Locations`;
+
+            // Calculate regional averages
+            const avgConversionRate = allDesigners.reduce((sum, d) => sum + d.conversionRate, 0) / totalDesigners;
+            const avgTicketValue = allDesigners.reduce((sum, d) => sum + d.avgTicket, 0) / totalDesigners;
+            const avgAppointments = 18.3; // Sample data for appointments per designer per month
+
+            document.getElementById('totalDesigners').textContent = totalDesigners;
+            document.getElementById('avgDesignerPerformance').textContent = avgPerformance.toFixed(1) + '%';
+            document.getElementById('avgSalesPerDesigner').textContent = '$' + Math.round(avgSalesPerDesigner).toLocaleString();
+
+            
+            // Update regional performance tracking
+            document.getElementById('avgConversionRate').textContent = avgConversionRate.toFixed(1) + '%';
+            document.getElementById('avgTicketValue').textContent = '$' + Math.round(avgTicketValue).toLocaleString();
+            document.getElementById('avgAppointments').textContent = avgAppointments.toFixed(1);
+        }
+
+        // Global filter state
+        let designerFilters = {
+            performance: 'all',
+            franchise: 'all',
+            minSales: null,
+            maxSales: null
+        };
+
+        // Render designer table
+        function renderDesignerTable() {
+            const tbody = document.getElementById('designerTableBody');
+            tbody.innerHTML = '';
+
+            // Get all designers with franchise info
+            let allDesigners = [];
+            franchises.forEach(franchise => {
+                franchise.designers.forEach(designer => {
+                    allDesigners.push({
+                        ...designer,
+                        franchiseName: franchise.name,
+                        franchiseLocation: franchise.location,
+                        franchiseId: franchise.id
+                    });
+                });
+            });
+
+            // Apply filters
+            let filteredDesigners = allDesigners.filter(designer => {
+                const goalPercentage = (designer.sales / designer.goal) * 100;
+                
+                // Performance filter
+                if (designerFilters.performance !== 'all') {
+                    if (designerFilters.performance === 'exceeding' && goalPercentage < 95) return false;
+                    if (designerFilters.performance === 'meeting' && (goalPercentage < 80 || goalPercentage >= 95)) return false;
+                    if (designerFilters.performance === 'developing' && (goalPercentage < 60 || goalPercentage >= 80)) return false;
+                    if (designerFilters.performance === 'needs-support' && goalPercentage >= 60) return false;
+                }
+
+                // Franchise filter
+                if (designerFilters.franchise !== 'all' && designer.franchiseName !== designerFilters.franchise) return false;
+
+                // Sales range filter
+                if (designerFilters.minSales && designer.sales < designerFilters.minSales) return false;
+                if (designerFilters.maxSales && designer.sales > designerFilters.maxSales) return false;
+
+                return true;
+            });
+
+            // Sort by selected criteria
+            filteredDesigners.sort((a, b) => {
+                switch (currentRankingCriteria) {
+                    case 'sales':
+                        return b.sales - a.sales;
+                    case 'closing':
+                        return b.conversionRate - a.conversionRate;
+                    case 'ticket':
+                        return b.avgTicket - a.avgTicket;
+                    default:
+                        return b.sales - a.sales;
+                }
+            });
+
+            filteredDesigners.forEach((designer, index) => {
+                const rank = index + 1;
+                const goalPercentage = ((designer.sales / designer.goal) * 100).toFixed(1);
+                
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 cursor-pointer';
+                row.dataset.designerId = `${designer.franchiseId}-${designer.name}`;
+
+                // Determine rank badge color
+                const getRankBadge = (rank) => {
+                    if (rank === 1) return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+                    if (rank <= 5) return 'bg-green-100 text-green-800 border-green-200';
+                    if (rank <= 15) return 'bg-blue-100 text-blue-800 border-blue-200';
+                    return 'bg-gray-100 text-gray-800 border-gray-200';
+                };
+
+                // Determine goal performance color
+                const getGoalColor = (percentage) => {
+                    if (percentage >= 95) return 'bg-green-100 text-green-800';
+                    if (percentage >= 80) return 'bg-blue-100 text-blue-800';
+                    if (percentage >= 60) return 'bg-yellow-100 text-yellow-800';
+                    return 'bg-red-100 text-red-800';
+                };
+
+                // Performance indicator
+                const getPerformanceIndicator = (percentage) => {
+                    if (percentage >= 95) return '🌟';
+                    if (percentage >= 80) return '✅';
+                    if (percentage >= 60) return '⚠️';
+                    return '🔴';
+                };
+
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getRankBadge(rank)}">
+                            #${rank}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="font-medium text-gray-900">${designer.name}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="font-medium text-gray-900">${designer.franchiseName}</div>
+                        <div class="text-sm text-gray-500">${designer.franchiseLocation}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        $${designer.sales.toLocaleString()}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        $${designer.avgTicket}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        ${designer.conversionRate}%
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <span class="text-lg">${getPerformanceIndicator(goalPercentage)}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button class="designer-detail-btn text-indigo-600 hover:text-indigo-900" data-designer-id="${designer.franchiseId}-${designer.name}">
+                            View Profile
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Add click handlers
+            document.querySelectorAll('.designer-detail-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const designerId = e.target.dataset.designerId;
+                    showDesignerDetail(designerId);
+                });
+            });
+        }
+
+        // Render top performers
+        function renderTopPerformers() {
+            const topDesignersContainer = document.getElementById('topDesigners');
+            const allDesigners = franchises.flatMap(f => 
+                f.designers.map(d => ({
+                    ...d,
+                    franchise: f.name,
+                    goalPercentage: ((d.sales / d.goal) * 100).toFixed(1)
+                }))
+            );
+
+            // Sort by current ranking criteria
+            allDesigners.sort((a, b) => {
+                switch (currentRankingCriteria) {
+                    case 'sales':
+                        return b.sales - a.sales;
+                    case 'closing':
+                        return b.conversionRate - a.conversionRate;
+                    case 'ticket':
+                        return b.avgTicket - a.avgTicket;
+                    default:
+                        return b.sales - a.sales;
+                }
+            });
+
+            const topDesigners = allDesigners.slice(0, 5);
+
+            topDesignersContainer.innerHTML = '';
+            topDesigners.forEach((designer, index) => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between p-3 bg-gray-50 rounded-lg';
+                
+                // Get display value based on ranking criteria
+                const getDisplayValue = () => {
+                    switch (currentRankingCriteria) {
+                        case 'sales':
+                            return `$${designer.sales.toLocaleString()}`;
+                        case 'closing':
+                            return `${designer.conversionRate}%`;
+                        case 'ticket':
+                            return `$${designer.avgTicket}`;
+                        default:
+                            return `$${designer.sales.toLocaleString()}`;
+                    }
+                };
+
+                const getSecondaryValue = () => {
+                    switch (currentRankingCriteria) {
+                        case 'sales':
+                            return `$${designer.avgTicket} avg ticket`;
+                        case 'closing':
+                            return `$${designer.sales.toLocaleString()} sales`;
+                        case 'ticket':
+                            return `${designer.conversionRate}% closing rate`;
+                        default:
+                            return `$${designer.avgTicket} avg ticket`;
+                    }
+                };
+
+                div.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <span class="text-lg">${index === 0 ? '🏆' : index === 1 ? '🥈' : index === 2 ? '🥉' : '⭐'}</span>
+                        <div>
+                            <div class="font-medium text-gray-900">${designer.name}</div>
+                            <div class="text-sm text-gray-500">${designer.franchise} • ${designer.specialty}</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-semibold text-gray-900">${getDisplayValue()}</div>
+                        <div class="text-sm text-green-600">${getSecondaryValue()}</div>
+                    </div>
+                `;
+                topDesignersContainer.appendChild(div);
+            });
+        }
+
+
+
+
+
+        // Show regional overview
+        function showRegionalOverview() {
+            const content = document.getElementById('drillDownContent');
+            
+            // Calculate regional statistics
+            const allDesigners = franchises.flatMap(f => f.designers);
+            const totalSales = allDesigners.reduce((sum, d) => sum + d.sales, 0);
+            const totalGoals = allDesigners.reduce((sum, d) => sum + d.goal, 0);
+            const avgConversion = allDesigners.reduce((sum, d) => sum + d.conversionRate, 0) / allDesigners.length;
+            const avgTicket = allDesigners.reduce((sum, d) => sum + d.avgTicket, 0) / allDesigners.length;
+            
+            // Performance distribution
+            const exceeding = allDesigners.filter(d => (d.sales / d.goal) >= 0.95).length;
+            const meeting = allDesigners.filter(d => (d.sales / d.goal) >= 0.80 && (d.sales / d.goal) < 0.95).length;
+            const developing = allDesigners.filter(d => (d.sales / d.goal) >= 0.60 && (d.sales / d.goal) < 0.80).length;
+            const needsSupport = allDesigners.filter(d => (d.sales / d.goal) < 0.60).length;
+            
+            // Top and bottom performers
+            const sortedByPerformance = [...allDesigners].sort((a, b) => (b.sales / b.goal) - (a.sales / a.goal));
+            const topPerformers = sortedByPerformance.slice(0, 5);
+            const needsAttention = sortedByPerformance.slice(-5).reverse();
+
+            content.innerHTML = `
+                <div class="mb-6">
+                    <h4 class="text-xl font-bold text-gray-800">Regional Performance Overview</h4>
+                    <p class="text-gray-600">Pacific Northwest Region - Detailed Analytics</p>
+                </div>
+
+                <!-- Regional Summary -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h5 class="font-semibold text-blue-800">Total Regional Sales</h5>
+                        <p class="text-xl font-bold text-blue-600">$${totalSales.toLocaleString()}</p>
+                        <p class="text-sm text-blue-600">${((totalSales / totalGoals) * 100).toFixed(1)}% of regional goal</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h5 class="font-semibold text-green-800">Avg Conversion Rate</h5>
+                        <p class="text-xl font-bold text-green-600">${avgConversion.toFixed(1)}%</p>
+                        <p class="text-sm text-green-600">Across all designers</p>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h5 class="font-semibold text-purple-800">Avg Ticket Value</h5>
+                        <p class="text-xl font-bold text-purple-600">$${Math.round(avgTicket).toLocaleString()}</p>
+                        <p class="text-sm text-purple-600">Regional average</p>
+                    </div>
+                    <div class="bg-orange-50 p-4 rounded-lg">
+                        <h5 class="font-semibold text-orange-800">Active Designers</h5>
+                        <p class="text-xl font-bold text-orange-600">${allDesigners.length}</p>
+                        <p class="text-sm text-orange-600">Across 12 locations</p>
+                    </div>
+                </div>
+
+                <!-- Performance Distribution -->
+                <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                    <h5 class="font-semibold text-gray-800 mb-4">Designer Performance Distribution</h5>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-green-600">${exceeding}</div>
+                            <div class="text-sm text-gray-600">Exceeding Goals</div>
+                            <div class="text-xs text-gray-500">(95%+ of goal)</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-blue-600">${meeting}</div>
+                            <div class="text-sm text-gray-600">Meeting Goals</div>
+                            <div class="text-xs text-gray-500">(80-95% of goal)</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-yellow-600">${developing}</div>
+                            <div class="text-sm text-gray-600">Developing</div>
+                            <div class="text-xs text-gray-500">(60-80% of goal)</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-red-600">${needsSupport}</div>
+                            <div class="text-sm text-gray-600">Needs Support</div>
+                            <div class="text-xs text-gray-500">(<60% of goal)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Performers -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-green-50 rounded-lg p-4">
+                        <h5 class="font-semibold text-green-800 mb-4">🏆 Top 5 Performers</h5>
+                        <div class="space-y-3">
+                            ${topPerformers.map((designer, index) => {
+                                const franchise = franchises.find(f => f.designers.includes(designer));
+                                const goalPercentage = ((designer.sales / designer.goal) * 100).toFixed(1);
+                                return `
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <div class="font-medium text-gray-900">${designer.name}</div>
+                                            <div class="text-sm text-gray-600">${franchise.name}</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="font-semibold text-green-600">${goalPercentage}%</div>
+                                            <div class="text-sm text-gray-600">$${designer.sales.toLocaleString()}</div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+
+                    <div class="bg-red-50 rounded-lg p-4">
+                        <h5 class="font-semibold text-red-800 mb-4">⚠️ Needs Attention</h5>
+                        <div class="space-y-3">
+                            ${needsAttention.map(designer => {
+                                const franchise = franchises.find(f => f.designers.includes(designer));
+                                const goalPercentage = ((designer.sales / designer.goal) * 100).toFixed(1);
+                                return `
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <div class="font-medium text-gray-900">${designer.name}</div>
+                                            <div class="text-sm text-gray-600">${franchise.name}</div>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="font-semibold text-red-600">${goalPercentage}%</div>
+                                            <div class="text-sm text-gray-600">$${designer.sales.toLocaleString()}</div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Franchise Performance Summary -->
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h5 class="font-semibold text-gray-800 mb-4">Franchise Performance Summary</h5>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-white">
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Location</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Designers</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Total Sales</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Avg Performance</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                ${franchises.map(franchise => {
+                                    const franchiseSales = franchise.designers.reduce((sum, d) => sum + d.sales, 0);
+                                    const avgPerformance = franchise.designers.reduce((sum, d) => sum + (d.sales / d.goal), 0) / franchise.designers.length * 100;
+                                    const statusColor = avgPerformance >= 85 ? 'text-green-600' : avgPerformance >= 70 ? 'text-yellow-600' : 'text-red-600';
+                                    const statusText = avgPerformance >= 85 ? 'Excellent' : avgPerformance >= 70 ? 'Good' : 'Needs Focus';
+                                    
+                                    return `
+                                        <tr>
+                                            <td class="px-4 py-2 font-medium text-gray-900">${franchise.name}</td>
+                                            <td class="px-4 py-2 text-gray-900">${franchise.designers.length}</td>
+                                            <td class="px-4 py-2 text-gray-900">$${franchiseSales.toLocaleString()}</td>
+                                            <td class="px-4 py-2 text-gray-900">${avgPerformance.toFixed(1)}%</td>
+                                            <td class="px-4 py-2 ${statusColor} font-medium">${statusText}</td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+            showModal('drillDownModal');
+        }
+
+        // Show drill down modal
+        function showDrillDown(franchiseId) {
+            const franchise = franchises.find(f => f.id === franchiseId);
+            if (!franchise) return;
+
+            const content = document.getElementById('drillDownContent');
+            content.innerHTML = `
+                <div class="mb-6">
+                    <h4 class="text-xl font-bold text-gray-800">${franchise.name}</h4>
+                    <p class="text-gray-600">${franchise.location}</p>
+                </div>
+
+                <!-- Franchise Overview -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h5 class="font-semibold text-blue-800">Monthly Sales</h5>
+                        <p class="text-xl font-bold text-blue-600">$${franchise.monthlySales.toLocaleString()}</p>
+                        <p class="text-sm text-blue-600">Current month total</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h5 class="font-semibold text-green-800">Conversion Rate</h5>
+                        <p class="text-xl font-bold text-green-600">${franchise.conversionRate}%</p>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h5 class="font-semibold text-purple-800">Avg Ticket</h5>
+                        <p class="text-xl font-bold text-purple-600">$${franchise.avgTicket}</p>
+                    </div>
+                    <div class="bg-orange-50 p-4 rounded-lg">
+                        <h5 class="font-semibold text-orange-800">Designers</h5>
+                        <p class="text-xl font-bold text-orange-600">${franchise.designerCount}</p>
+                    </div>
+                </div>
+
+                <!-- Detailed Analytics -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- Closing Rate Analytics -->
+                    <div class="bg-blue-50 rounded-lg p-6">
+                        <h5 class="font-semibold text-blue-800 mb-4">📊 Closing Rate Analytics</h5>
+                        
+                        <!-- Current vs Target -->
+                        <div class="mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium text-blue-700">Current Rate</span>
+                                <span class="text-lg font-bold text-blue-600">${franchise.conversionRate}%</span>
+                            </div>
+                            <div class="w-full bg-blue-200 rounded-full h-3">
+                                <div class="bg-blue-600 h-3 rounded-full" style="width: ${Math.min(franchise.conversionRate, 100)}%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-blue-600 mt-1">
+                                <span>Target: 65%</span>
+                                <span>${franchise.conversionRate >= 65 ? '✅ Above Target' : '⚠️ Below Target'}</span>
+                            </div>
+                        </div>
+
+                        <!-- Monthly Trend -->
+                        <div class="mb-4">
+                            <h6 class="text-sm font-medium text-blue-700 mb-2">3-Month Trend</h6>
+                            <div class="space-y-2">
+                                ${['July: 51.2%', 'August: 55.8%', `September: ${franchise.conversionRate}%`].map((month, index) => {
+                                    const rate = parseFloat(month.split(': ')[1]);
+                                    const isImproving = index > 0 && rate > [51.2, 55.8, franchise.conversionRate][index - 1];
+                                    return `
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-xs text-blue-600">${month}</span>
+                                            <span class="text-xs ${isImproving ? 'text-green-600' : 'text-blue-600'}">
+                                                ${isImproving ? '↗️' : '📊'}
+                                            </span>
+                                        </div>
+                                        <div class="w-full bg-blue-200 rounded-full h-1">
+                                            <div class="bg-blue-500 h-1 rounded-full" style="width: ${rate}%"></div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+
+                        <!-- Designer Breakdown -->
+                        <div>
+                            <h6 class="text-sm font-medium text-blue-700 mb-2">Designer Breakdown</h6>
+                            <div class="space-y-2">
+                                ${franchise.designers.map(designer => {
+                                    const rateColor = designer.conversionRate >= 65 ? 'text-green-600' : designer.conversionRate >= 50 ? 'text-yellow-600' : 'text-red-600';
+                                    return `
+                                        <div class="flex justify-between items-center text-sm">
+                                            <span class="text-blue-700">${designer.name}</span>
+                                            <span class="${rateColor} font-medium">${designer.conversionRate}%</span>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Average Ticket Analytics -->
+                    <div class="bg-purple-50 rounded-lg p-6">
+                        <h5 class="font-semibold text-purple-800 mb-4">💰 Average Ticket Analytics</h5>
+                        
+                        <!-- Current vs Target -->
+                        <div class="mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-sm font-medium text-purple-700">Current Average</span>
+                                <span class="text-lg font-bold text-purple-600">$${franchise.avgTicket}</span>
+                            </div>
+                            <div class="w-full bg-purple-200 rounded-full h-3">
+                                <div class="bg-purple-600 h-3 rounded-full" style="width: ${Math.min((franchise.avgTicket / 2000) * 100, 100)}%"></div>
+                            </div>
+                            <div class="flex justify-between text-xs text-purple-600 mt-1">
+                                <span>Target: $1,800</span>
+                                <span>${franchise.avgTicket >= 1800 ? '✅ Above Target' : '⚠️ Below Target'}</span>
+                            </div>
+                        </div>
+
+                        <!-- Monthly Trend -->
+                        <div class="mb-4">
+                            <h6 class="text-sm font-medium text-purple-700 mb-2">3-Month Trend</h6>
+                            <div class="space-y-2">
+                                ${[
+                                    `July: $${Math.round(franchise.avgTicket * 0.92)}`,
+                                    `August: $${Math.round(franchise.avgTicket * 0.96)}`,
+                                    `September: $${franchise.avgTicket}`
+                                ].map((month, index) => {
+                                    const amount = parseInt(month.split('$')[1].replace(',', ''));
+                                    const prevAmount = index > 0 ? parseInt([
+                                        Math.round(franchise.avgTicket * 0.92),
+                                        Math.round(franchise.avgTicket * 0.96),
+                                        franchise.avgTicket
+                                    ][index - 1]) : 0;
+                                    const isImproving = index > 0 && amount > prevAmount;
+                                    return `
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-xs text-purple-600">${month}</span>
+                                            <span class="text-xs ${isImproving ? 'text-green-600' : 'text-purple-600'}">
+                                                ${isImproving ? '↗️' : '📊'}
+                                            </span>
+                                        </div>
+                                        <div class="w-full bg-purple-200 rounded-full h-1">
+                                            <div class="bg-purple-500 h-1 rounded-full" style="width: ${Math.min((amount / 2000) * 100, 100)}%"></div>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+
+                        <!-- Ticket Range Distribution -->
+                        <div class="mb-4">
+                            <h6 class="text-sm font-medium text-purple-700 mb-2">Ticket Range Distribution</h6>
+                            <div class="space-y-2 text-xs">
+                                <div class="flex justify-between">
+                                    <span class="text-purple-600">$500-$1,000</span>
+                                    <span class="text-purple-600">15%</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-purple-600">$1,000-$1,500</span>
+                                    <span class="text-purple-600">35%</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-purple-600">$1,500-$2,500</span>
+                                    <span class="text-purple-600 font-semibold">40%</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-purple-600">$2,500+</span>
+                                    <span class="text-purple-600">10%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Designer Breakdown -->
+                        <div>
+                            <h6 class="text-sm font-medium text-purple-700 mb-2">Designer Breakdown</h6>
+                            <div class="space-y-2">
+                                ${franchise.designers.map(designer => {
+                                    const ticketColor = designer.avgTicket >= 1800 ? 'text-green-600' : designer.avgTicket >= 1400 ? 'text-yellow-600' : 'text-red-600';
+                                    return `
+                                        <div class="flex justify-between items-center text-sm">
+                                            <span class="text-purple-700">${designer.name}</span>
+                                            <span class="${ticketColor} font-medium">$${designer.avgTicket}</span>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Insights -->
+                <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-lg p-6 mb-6">
+                    <h5 class="font-semibold text-gray-800 mb-4">🎯 Performance Insights & Recommendations</h5>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h6 class="font-medium text-green-700 mb-2">Closing Rate Insights</h6>
+                            <ul class="text-sm text-gray-700 space-y-1">
+                                ${franchise.conversionRate >= 65 
+                                    ? '<li>• Excellent closing performance - above regional target</li><li>• Consider sharing best practices with other locations</li>' 
+                                    : franchise.conversionRate >= 55 
+                                        ? '<li>• Good closing rate with room for improvement</li><li>• Focus on objection handling training</li>' 
+                                        : '<li>• Closing rate needs immediate attention</li><li>• Implement intensive sales training program</li>'
+                                }
+                                <li>• ${franchise.designers.filter(d => d.conversionRate >= 65).length} of ${franchise.designers.length} designers meeting closing targets</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h6 class="font-medium text-purple-700 mb-2">Average Ticket Insights</h6>
+                            <ul class="text-sm text-gray-700 space-y-1">
+                                ${franchise.avgTicket >= 1800 
+                                    ? '<li>• Strong upselling performance - exceeding targets</li><li>• Maintain focus on premium product positioning</li>' 
+                                    : franchise.avgTicket >= 1400 
+                                        ? '<li>• Average ticket approaching target levels</li><li>• Implement add-on sales training</li>' 
+                                        : '<li>• Average ticket significantly below target</li><li>• Focus on value-based selling techniques</li>'
+                                }
+                                <li>• ${franchise.designers.filter(d => d.avgTicket >= 1800).length} of ${franchise.designers.length} designers meeting ticket targets</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Designer Performance -->
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h5 class="font-semibold text-gray-800 mb-4">Designer Performance</h5>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-white">
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Designer</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Sales</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Avg Ticket</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Conversion Rate</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Performance</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                ${franchise.designers.map(designer => {
+                                    const goalPercentage = ((designer.sales / designer.goal) * 100).toFixed(1);
+                                    const performanceIcon = goalPercentage >= 95 ? '🌟' : goalPercentage >= 80 ? '✅' : goalPercentage >= 60 ? '⚠️' : '🔴';
+                                    const ticketColor = designer.avgTicket >= 1800 ? 'text-green-600' : designer.avgTicket >= 1400 ? 'text-yellow-600' : 'text-red-600';
+                                    const rateColor = designer.conversionRate >= 65 ? 'text-green-600' : designer.conversionRate >= 50 ? 'text-yellow-600' : 'text-red-600';
+                                    
+                                    return `
+                                        <tr>
+                                            <td class="px-4 py-2 font-medium text-gray-900">${designer.name}</td>
+                                            <td class="px-4 py-2 text-gray-900">$${designer.sales.toLocaleString()}</td>
+                                            <td class="px-4 py-2 ${ticketColor} font-medium">$${designer.avgTicket}</td>
+                                            <td class="px-4 py-2 ${rateColor} font-medium">${designer.conversionRate}%</td>
+                                            <td class="px-4 py-2 text-center text-lg">${performanceIcon}</td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+            showModal('drillDownModal');
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // View toggles
+            document.getElementById('weeklyView').addEventListener('click', () => switchView('weekly'));
+            document.getElementById('monthlyView').addEventListener('click', () => switchView('monthly'));
+            document.getElementById('quarterlyView').addEventListener('click', () => switchView('quarterly'));
+            document.getElementById('ytdView').addEventListener('click', () => switchView('ytd'));
+
+            // Ranking criteria toggles
+            document.getElementById('rankBySales').addEventListener('click', () => switchRankingCriteria('sales'));
+            document.getElementById('rankByClosing').addEventListener('click', () => switchRankingCriteria('closing'));
+            document.getElementById('rankByTicket').addEventListener('click', () => switchRankingCriteria('ticket'));
+
+            // Modal triggers
+            document.getElementById('manageFranchisesBtn').addEventListener('click', () => {
+                renderFranchiseManagementTable();
+                showModal('franchiseManagementModal');
+            });
+            document.getElementById('filterDesignersBtn').addEventListener('click', showDesignerFilterModal);
+            document.getElementById('exportDataBtn').addEventListener('click', exportData);
+
+            // Modal cancels and closes
+            document.getElementById('closeFranchiseManagement').addEventListener('click', () => hideModal('franchiseManagementModal'));
+            document.getElementById('cancelDesignerFilter').addEventListener('click', () => hideModal('designerFilterModal'));
+            document.getElementById('closeDrillDown').addEventListener('click', () => hideModal('drillDownModal'));
+            document.getElementById('cancelDelete').addEventListener('click', () => hideModal('deleteConfirmationModal'));
+            document.getElementById('confirmDelete').addEventListener('click', deleteFranchise);
+
+            // Form submissions
+            document.getElementById('addFranchiseForm').addEventListener('submit', addFranchise);
+            document.getElementById('designerFilterForm').addEventListener('submit', handleDesignerFilter);
+            document.getElementById('clearFilters').addEventListener('click', clearDesignerFilters);
+
+            // Month selector
+            document.getElementById('monthSelect').addEventListener('change', (e) => {
+                currentMonth = e.target.value;
+                renderDesignerTable();
+            });
+        }
+
+        // Render franchise management table
+        function renderFranchiseManagementTable() {
+            const tbody = document.getElementById('franchiseManagementTableBody');
+            tbody.innerHTML = '';
+
+            franchises.forEach(franchise => {
+                const goalPercentage = ((franchise.monthlySales / franchise.monthlyGoal) * 100).toFixed(1);
+                const performanceColor = goalPercentage >= 90 ? 'text-green-600' : goalPercentage >= 75 ? 'text-yellow-600' : 'text-red-600';
+                const performanceText = goalPercentage >= 90 ? 'Excellent' : goalPercentage >= 75 ? 'Good' : 'Needs Focus';
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-4 py-3 font-medium text-gray-900">${franchise.name}</td>
+                    <td class="px-4 py-3 text-gray-900">${franchise.location}</td>
+                    <td class="px-4 py-3 text-gray-900">$${franchise.monthlySales.toLocaleString()}</td>
+                    <td class="px-4 py-3 text-gray-900">$${franchise.monthlyGoal.toLocaleString()}</td>
+                    <td class="px-4 py-3 text-gray-900">${franchise.designerCount}</td>
+                    <td class="px-4 py-3 ${performanceColor} font-medium">${performanceText} (${goalPercentage}%)</td>
+                    <td class="px-4 py-3">
+                        <button class="delete-franchise-btn text-red-600 hover:text-red-800 font-medium" data-franchise-id="${franchise.id}">
+                            Delete
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Add delete event listeners
+            document.querySelectorAll('.delete-franchise-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const franchiseId = parseInt(e.target.dataset.franchiseId);
+                    const franchise = franchises.find(f => f.id === franchiseId);
+                    if (franchise) {
+                        franchiseToDelete = franchiseId;
+                        document.getElementById('deleteLocationName').textContent = franchise.name;
+                        showModal('deleteConfirmationModal');
+                    }
+                });
+            });
+        }
+
+        // Add new franchise
+        function addFranchise(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('newFranchiseName').value.trim();
+            const location = document.getElementById('newFranchiseLocation').value.trim();
+            const goal = parseInt(document.getElementById('newFranchiseGoal').value);
+            const designerCount = parseInt(document.getElementById('newFranchiseDesigners').value);
+
+            if (!name || !location || !goal || !designerCount) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Generate sample designers for the new franchise
+            const sampleDesignerNames = [
+                'Alex Johnson', 'Sarah Williams', 'Michael Brown', 'Jessica Davis', 'David Wilson',
+                'Emily Taylor', 'Christopher Moore', 'Amanda Anderson', 'Ryan Thomas', 'Lauren Jackson'
+            ];
+
+            const designers = [];
+            for (let i = 0; i < designerCount; i++) {
+                const designerName = sampleDesignerNames[i] || `Designer ${i + 1}`;
+                const individualGoal = Math.round(goal / designerCount);
+                const salesVariation = 0.6 + (Math.random() * 0.8); // 60% to 140% of goal
+                const sales = Math.round(individualGoal * salesVariation);
+                
+                designers.push({
+                    name: designerName,
+                    sales: sales,
+                    goal: individualGoal,
+                    avgTicket: 1200 + Math.round(Math.random() * 800), // $1200-$2000
+                    conversionRate: Math.round(40 + Math.random() * 35), // 40-75%
+                    experience: Math.random() > 0.5 ? `${Math.ceil(Math.random() * 6)} years` : '1 year',
+                    specialty: ['Modern Design', 'Traditional Style', 'Contemporary', 'Luxury Kitchens', 'Urban Living'][Math.floor(Math.random() * 5)]
+                });
+            }
+
+            const totalSales = designers.reduce((sum, d) => sum + d.sales, 0);
+            const avgTicket = Math.round(designers.reduce((sum, d) => sum + d.avgTicket, 0) / designers.length);
+            const avgConversion = Math.round(designers.reduce((sum, d) => sum + d.conversionRate, 0) / designers.length * 10) / 10;
+
+            const newFranchise = {
+                id: franchiseIdCounter++,
+                name: name,
+                location: location,
+                monthlySales: totalSales,
+                monthlyGoal: goal,
+                avgTicket: avgTicket,
+                conversionRate: avgConversion,
+                designerCount: designerCount,
+                topPerformer: designers.sort((a, b) => b.sales - a.sales)[0].name,
+                trend: 'stable',
+                designers: designers
+            };
+
+            franchises.push(newFranchise);
+            
+            // Update dashboard
+            updateDesignerMetrics();
+            renderDesignerTable();
+            renderTopPerformers();
+            renderFranchiseManagementTable();
+            updateFranchiseFilterOptions();
+
+            // Clear form
+            document.getElementById('addFranchiseForm').reset();
+            
+            alert(`Successfully added ${name}! The location has been added with ${designerCount} sample designers.`);
+        }
+
+        // Delete franchise
+        function deleteFranchise() {
+            if (franchiseToDelete === null) return;
+
+            const franchiseIndex = franchises.findIndex(f => f.id === franchiseToDelete);
+            if (franchiseIndex === -1) return;
+
+            const deletedFranchise = franchises[franchiseIndex];
+            franchises.splice(franchiseIndex, 1);
+
+            // Update dashboard
+            updateDesignerMetrics();
+            renderDesignerTable();
+            renderTopPerformers();
+            renderFranchiseManagementTable();
+            updateFranchiseFilterOptions();
+
+            hideModal('deleteConfirmationModal');
+            franchiseToDelete = null;
+
+            alert(`Successfully deleted ${deletedFranchise.name} and all associated data.`);
+        }
+
+        // Update franchise filter options
+        function updateFranchiseFilterOptions() {
+            const franchiseFilter = document.getElementById('franchiseFilter');
+            const currentValue = franchiseFilter.value;
+            
+            // Clear existing options except "All Locations"
+            franchiseFilter.innerHTML = '<option value="all">All Locations</option>';
+            
+            // Add current franchises
+            franchises.forEach(franchise => {
+                const option = document.createElement('option');
+                option.value = franchise.name;
+                option.textContent = franchise.name;
+                franchiseFilter.appendChild(option);
+            });
+            
+            // Restore previous selection if it still exists
+            if (currentValue !== 'all' && franchises.some(f => f.name === currentValue)) {
+                franchiseFilter.value = currentValue;
+            }
+        }
+
+        // Show designer filter modal
+        function showDesignerFilterModal() {
+            showModal('designerFilterModal');
+        }
+
+        // Handle designer filter
+        function handleDesignerFilter(e) {
+            e.preventDefault();
+            designerFilters.performance = document.getElementById('performanceFilter').value;
+            designerFilters.franchise = document.getElementById('franchiseFilter').value;
+            designerFilters.minSales = document.getElementById('minSales').value ? parseInt(document.getElementById('minSales').value) : null;
+            designerFilters.maxSales = document.getElementById('maxSales').value ? parseInt(document.getElementById('maxSales').value) : null;
+            
+            renderDesignerTable();
+            hideModal('designerFilterModal');
+        }
+
+        // Clear designer filters
+        function clearDesignerFilters() {
+            designerFilters = {
+                performance: 'all',
+                franchise: 'all',
+                minSales: null,
+                maxSales: null
+            };
+            
+            document.getElementById('performanceFilter').value = 'all';
+            document.getElementById('franchiseFilter').value = 'all';
+            document.getElementById('minSales').value = '';
+            document.getElementById('maxSales').value = '';
+            
+            renderDesignerTable();
+        }
+
+        // Show designer detail
+        function showDesignerDetail(designerId) {
+            const [franchiseId, designerName] = designerId.split('-');
+            const franchise = franchises.find(f => f.id === parseInt(franchiseId));
+            const designer = franchise?.designers.find(d => d.name === designerName);
+            
+            if (!designer) return;
+
+            const content = document.getElementById('drillDownContent');
+            const goalPercentage = ((designer.sales / designer.goal) * 100).toFixed(1);
+            
+            content.innerHTML = `
+                <div class="mb-6">
+                    <h4 class="text-xl font-bold text-gray-800">${designer.name}</h4>
+                    <p class="text-gray-600">${franchise.name} • ${designer.experience} • ${designer.specialty}</p>
+                </div>
+
+                <!-- Designer Performance Overview -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h5 class="font-semibold text-blue-800">Monthly Sales</h5>
+                        <p class="text-xl font-bold text-blue-600">$${designer.sales.toLocaleString()}</p>
+                        <p class="text-sm text-blue-600">${goalPercentage}% of goal</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h5 class="font-semibold text-green-800">Conversion Rate</h5>
+                        <p class="text-xl font-bold text-green-600">${designer.conversionRate}%</p>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h5 class="font-semibold text-purple-800">Avg Ticket</h5>
+                        <p class="text-xl font-bold text-purple-600">$${designer.avgTicket}</p>
+                    </div>
+                    <div class="bg-orange-50 p-4 rounded-lg">
+                        <h5 class="font-semibold text-orange-800">Goal Progress</h5>
+                        <p class="text-xl font-bold text-orange-600">$${designer.goal.toLocaleString()}</p>
+                        <div class="w-full bg-orange-200 rounded-full h-2 mt-1">
+                            <div class="bg-orange-600 h-2 rounded-full" style="width: ${Math.min(goalPercentage, 100)}%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Development Recommendations -->
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6">
+                    <h5 class="font-semibold text-gray-800 mb-4">Development Recommendations</h5>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h6 class="font-medium text-gray-700 mb-2">Strengths</h6>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                ${goalPercentage >= 90 ? '<li>• Consistently exceeding sales goals</li>' : ''}
+                                ${designer.conversionRate >= 60 ? '<li>• Strong conversion rate performance</li>' : ''}
+                                ${designer.avgTicket >= 1500 ? '<li>• High average ticket value</li>' : ''}
+                                <li>• Specialized in ${designer.specialty}</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h6 class="font-medium text-gray-700 mb-2">Growth Opportunities</h6>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                ${goalPercentage < 80 ? '<li>• Focus on goal achievement strategies</li>' : ''}
+                                ${designer.conversionRate < 55 ? '<li>• Improve consultation and closing skills</li>' : ''}
+                                ${designer.avgTicket < 1400 ? '<li>• Upselling and add-on training</li>' : ''}
+                                ${designer.experience.includes('1 year') ? '<li>• Mentorship with senior designers</li>' : ''}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            showModal('drillDownModal');
+        }
+
+        // Switch view
+        function switchView(view) {
+            currentView = view;
+            
+            // Update button styles
+            document.querySelectorAll('[id$="View"]').forEach(btn => {
+                btn.className = 'px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300';
+            });
+            document.getElementById(view + 'View').className = 'px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium';
+
+            // Update period display
+            const periods = {
+                weekly: 'Week of September 2-8, 2025',
+                monthly: 'September 2025',
+                quarterly: 'Q3 2025',
+                ytd: 'January - September 2025'
+            };
+
+            document.getElementById('currentPeriod').textContent = periods[view];
+        }
+
+        // Switch ranking criteria
+        function switchRankingCriteria(criteria) {
+            currentRankingCriteria = criteria;
+            
+            // Update button styles
+            document.getElementById('rankBySales').className = 'px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-300';
+            document.getElementById('rankByClosing').className = 'px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-300';
+            document.getElementById('rankByTicket').className = 'px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-300';
+            
+            const colors = {
+                sales: 'bg-green-600',
+                closing: 'bg-blue-600',
+                ticket: 'bg-purple-600'
+            };
+            
+            document.getElementById(`rankBy${criteria.charAt(0).toUpperCase() + criteria.slice(1)}`).className = 
+                `px-4 py-2 ${colors[criteria]} text-white rounded-lg font-medium text-sm`;
+
+            // Re-render table and top performers with new ranking
+            renderDesignerTable();
+            renderTopPerformers();
+        }
+
+        // Modal functions
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+            document.getElementById(modalId).classList.add('flex');
+        }
+
+        function hideModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+            document.getElementById(modalId).classList.remove('flex');
+        }
+
+
+
+        // Export data function
+        function exportData() {
+            const csvContent = "data:text/csv;charset=utf-8," 
+                + "Rank,Franchise,Location,Monthly Sales,Monthly Goal,% of Goal,Avg Ticket,Conversion Rate,Designers,Top Performer\n"
+                + franchises.map((f, i) => {
+                    const rank = [...franchises].sort((a, b) => b.monthlySales - a.monthlySales).findIndex(franchise => franchise.id === f.id) + 1;
+                    const goalPercentage = ((f.monthlySales / f.monthlyGoal) * 100).toFixed(1);
+                    return `${rank},"${f.name}","${f.location}",${f.monthlySales},${f.monthlyGoal},${goalPercentage}%,${f.avgTicket},${f.conversionRate}%,${f.designerCount},"${f.topPerformer}"`;
+                }).join("\n");
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `regional_performance_${currentMonth}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Initialize dashboard on page load
+        initDashboard();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'985d5a05a19e1526',t:'MTc1OTAwMDc1Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
